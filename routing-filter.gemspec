@@ -1,17 +1,17 @@
-$:.unshift File.expand_path('../lib', __FILE__)
+$:.unshift File.expand_path('lib', __dir__)
 require 'routing_filter/version'
 
-rails_version = ['>= 6.1']
+rails_version = ['>= 7.1']
 
 Gem::Specification.new do |s|
-  s.name         = "routing-filter"
+  s.name         = 'routing-filter'
   s.version      = RoutingFilter::VERSION
-  s.license      = "MIT"
-  s.authors      = ["Sven Fuchs"]
-  s.email        = "svenfuchs@artweb-design.de"
-  s.homepage     = "http://github.com/svenfuchs/routing-filter"
-  s.summary      = "Routing filters wraps around the complex beast that the Rails routing system is, allowing for unseen flexibility and power in Rails URL recognition and generation"
-  s.description  = "Routing filters wraps around the complex beast that the Rails routing system is, allowing for unseen flexibility and power in Rails URL recognition and generation."
+  s.license      = 'MIT'
+  s.authors      = ['Alessandro De Simone, William Fish, Svend Fuchs']
+  s.email        = 'svenfuchs@artweb-design.de'
+  s.homepage     = 'http://github.com/svenfuchs/routing-filter'
+  s.summary      = 'Routing filters wraps around the complex beast that the Rails routing system is, allowing for unseen flexibility and power in Rails URL recognition and generation'
+  s.description  = 'Routing filters wraps around the complex beast that the Rails routing system is, allowing for unseen flexibility and power in Rails URL recognition and generation.'
 
   s.files        = Dir['CHANGELOG.md', 'README.markdown', 'MIT-LICENSE', 'lib/**/*']
   s.platform     = Gem::Platform::RUBY
@@ -22,8 +22,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', rails_version
 
   s.add_development_dependency 'i18n'
-  s.add_development_dependency 'test_declarative'
+  s.add_development_dependency 'minitest', '< 5.10.2'
   s.add_development_dependency 'rack-test', '~> 0.6.2'
   s.add_development_dependency 'rails', rails_version
-  s.add_development_dependency 'minitest', '< 5.10.2'
+  s.add_development_dependency 'test_declarative'
 end
