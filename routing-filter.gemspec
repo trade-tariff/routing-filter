@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
-  s.authors = ["Alessandro De Simone, William Fish, Svend Fuchs".freeze]
+  s.authors = ["Alessandro De Simone, William Fish, Sven Fuchs".freeze]
   s.date = "2024-01-09"
   s.description = "Routing filters wraps around the complex beast that the Rails routing system is, allowing for unseen flexibility and power in Rails URL recognition and generation.".freeze
   s.email = "svenfuchs@artweb-design.de".freeze
