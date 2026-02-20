@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<actionpack>.freeze, [">= 7.1"])
   s.add_runtime_dependency(%q<activesupport>.freeze, [">= 7.1"])
   s.add_development_dependency(%q<i18n>.freeze, [">= 0"])
-  s.add_development_dependency(%q<minitest>.freeze, ["< 5.10.2"])
+  s.add_development_dependency(%q<minitest>.freeze, [">= 5.1"])
   s.add_development_dependency(%q<rack-test>.freeze, ["~> 0.6.2"])
   s.add_development_dependency(%q<rails>.freeze, [">= 7.1"])
   s.add_development_dependency(%q<test_declarative>.freeze, [">= 0"])
