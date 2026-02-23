@@ -1,3 +1,7 @@
+## 0.8.0
+
+* Rails 8.1+ exclusive support (patches `recognize` instead of removed `find_routes`)
+
 ## 0.7.0
 
 * Rails 6.1 exclusive support
