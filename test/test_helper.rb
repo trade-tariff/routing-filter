@@ -13,7 +13,7 @@ require 'test_adapters/rails'
 
 I18n.enforce_available_locales = false
 
-class MiniTest::Test
+class Minitest::Test
   def draw_routes(&block)
     ActionDispatch::Routing::RouteSet.new.tap { |set| set.draw(&block) }
   end
