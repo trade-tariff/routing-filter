@@ -50,4 +50,3 @@ module TestRailsAdapter
     # config.active_record.whitelist_attributes = true
   end
 end
-

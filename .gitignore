@@ -1,6 +1,7 @@
 vendor
 log
 .bundle
+.pre-commit-config.yaml
 Gemfile.lock
 gemfiles/*.lock
 *.gem
