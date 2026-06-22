@@ -19,11 +19,11 @@ module ActionDispatchRoutingRouteSetWithFiltering
     names.each { |name| filters.unshift(RoutingFilter.build(name, options)) }
   end
 
-  def generate(route_key, options, recall = {})
+  def generate(route_key, options, recall = {}, method_name = nil)
     options = options.symbolize_keys
 
     filters.run(:around_generate, options, &lambda {
-      RoutingFilter::ResultWrapper.new(super(route_key, options, recall))
+      RoutingFilter::ResultWrapper.new(super(route_key, options, recall, method_name))
     }).generate
   end
 
