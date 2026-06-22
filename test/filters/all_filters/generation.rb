@@ -39,4 +39,10 @@ module Generation
     params = self.params.merge(:locale => 'de', :page => 2, :uuid => uuid)
     assert_generates "/de/#{uuid}/some/page/2.html", routes.path_for(params)
   end
+
+  test 'generates the path /de/:uuid/some/page/2.html with named route helpers' do
+    path = routes.url_helpers.some_path(:locale => 'de', :page => 2, :uuid => uuid)
+
+    assert_equal "/de/#{uuid}/some/page/2.html", path
+  end
 end

@@ -17,7 +17,7 @@ class AllFiltersTest < Minitest::Test
 
     @routes = draw_routes do
       filter :uuid, :pagination ,:locale, :extension
-      get 'some', :to => 'some#index'
+      get 'some', :to => 'some#index', :as => :some
     end
   end
 
