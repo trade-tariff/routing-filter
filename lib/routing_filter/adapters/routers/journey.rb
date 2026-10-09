@@ -25,8 +25,11 @@ module ActionDispatchJourneyRouterWithFiltering
       # Merge in custom parameters that will be visible to the controller
       params = parameters.merge(filter_parameters)
 
-      # Reset the path before yielding to the controller (prevents breakages in CSRF validation)
-      req.path_info = original_path
+      # Reset the path before yielding to the controller (prevents breakages in CSRF validation).
+      # Only do this for anchored routes. For a mounted app (an unanchored route) Rails has
+      # already moved the mount path into SCRIPT_NAME and set PATH_INFO to the remainder,
+      # and it restores both itself after the app returns.
+      req.path_info = original_path if route.path.anchored
       block.call(route, params)
     end
   end

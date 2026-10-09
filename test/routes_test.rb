@@ -87,4 +87,42 @@ class RoutesTest < Minitest::Test
     assert_equal 'yes', recognized.first[:marker]
     assert_equal '/marker/some', request.path_info
   end
+
+  test "journey router keeps the script name and path info that rails sets for a mounted app" do
+    seen = {}
+    mounted_app = lambda do |env|
+      seen[:script_name] = env['SCRIPT_NAME']
+      seen[:path_info] = env['PATH_INFO']
+      [200, {}, ['mounted']]
+    end
+
+    routes = draw_routes do
+      filter :recognition_marker
+      mount mounted_app => '/mounted'
+    end
+
+    routes.call(Rack::MockRequest.env_for('/mounted/child'))
+
+    assert_equal '/mounted', seen[:script_name]
+    assert_equal '/child', seen[:path_info]
+  end
+
+  test "journey router gives a mounted app the filtered path" do
+    seen = {}
+    mounted_app = lambda do |env|
+      seen[:script_name] = env['SCRIPT_NAME']
+      seen[:path_info] = env['PATH_INFO']
+      [200, {}, ['mounted']]
+    end
+
+    routes = draw_routes do
+      filter :recognition_marker
+      mount mounted_app => '/mounted'
+    end
+
+    routes.call(Rack::MockRequest.env_for('/marker/mounted/child'))
+
+    assert_equal '/mounted', seen[:script_name]
+    assert_equal '/child', seen[:path_info]
+  end
 end
