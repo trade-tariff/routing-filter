@@ -118,6 +118,20 @@
           pre-commit run --files "''${changed_files[@]}"
         '';
 
+        reviewEnvironment = ''
+          if [ "''${REVIEW_SANDBOX:-}" != 1 ] || [ "$PWD" != /workspace ]; then
+            echo 'Run review commands inside a disposable review sandbox.' >&2
+            exit 64
+          fi
+          export TMPDIR=/workspace/.review/tmp
+          export PRE_COMMIT_HOME=/workspace/.review/pre-commit
+          export GEM_HOME=/workspace/.review/gems
+          export GEM_PATH="$GEM_HOME''${REVIEW_GEM_CACHE:+:$REVIEW_GEM_CACHE}"
+          export BUNDLE_IGNORE_CONFIG=1
+          unset BUNDLE_PATH BUNDLE_APP_CONFIG BUNDLE_WITHOUT
+          mkdir -p "$TMPDIR" "$GEM_HOME"
+        '';
+
         preCommitCheck = pre-commit-hooks.lib.${system}.run {
           src = ./.;
           default_stages = [ "pre-commit" ];
@@ -177,10 +191,35 @@
           inherit preCommitCheck;
         };
 
-        devShells.review = import ./nix/review.nix {
-          inherit pkgs;
-          baseShell = self.devShells.${system}.default;
-        };
+        devShells.review = self.devShells.${system}.default.overrideAttrs (old: {
+          shellHook = "";
+          nativeBuildInputs = [
+            preCommitCheck.config.package
+            (pkgs.writeShellApplication {
+              name = "review-bootstrap";
+              text = reviewEnvironment + ''
+                if [ -d /deps/gem-archives ]; then
+                  for archive in /deps/gem-archives/*.gem; do
+                    [ -f "$archive" ] || continue
+                    gem install --local --no-document --ignore-dependencies "$archive"
+                  done
+                fi
+                bundle check || bundle install --local
+              '';
+            })
+            (pkgs.writeShellApplication {
+              name = "review-check";
+              text = reviewEnvironment + ''
+                pre-commit run --all-files --config ${preCommitCheck.config.configFile}
+                bundle exec rake 2>&1 | tee "$TMPDIR/unit.log"
+                ruby -e 'abort "Skipped unit tests" if File.read(ARGV[0]).match?(/[1-9][0-9]* (?:skips|pendings|omissions)/)' "$TMPDIR/unit.log"
+              '';
+            })
+          ]
+          ++ (old.nativeBuildInputs or [ ]);
+          TZDIR = "${pkgs.tzdata.outPath}/share/zoneinfo";
+          SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        });
 
         devShells.default = pkgs.mkShell {
           shellHook = ''
