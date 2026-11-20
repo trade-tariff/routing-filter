@@ -34,7 +34,7 @@
           if builtins.pathExists ./.ruby-version then
             builtins.head (builtins.split "\n" (builtins.readFile ./.ruby-version))
           else
-            "4.0.5";
+            "4.0.10";
         ruby = pkgs."ruby-${rubyVersion}";
 
         psychBuildFlags = with pkgs; [
